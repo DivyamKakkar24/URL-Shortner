@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<div class="container my-5">
+  <div class="card text-center">
+	  <div class="card-header">
+	    URL Shortener
+	  </div>
+	  <div class="card-body">
+	    <form id="post-form">
+		    {% csrf_token %}
+		    <div class="input-group mb-3">
+		    	<span class="input-group-text" id="basic-addon3">https://example.com/users/</span>
+			  	<input type="text" class="form-control" name="link" id="link" placeholder="Enter URL here">
+				</div>
+		  	<div class="buttons">
+		    	<button class="btn btn-dark" type="submit" id="shorten">Shorten</button>
+		  	</div>
+			</form>
+			<section id="section"><h3></h3></section>
+	  </div>
+	</div>
+</div>
+
+{% endblock body %}
+
+{% block javascript %}
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript">
+	$('#post-form').submit(function(e){
+		e.preventDefault();
+
+		$.ajax({
+			type: 'POST',
+			url: '/create',
+			data: {
+				link: $('#link').val(),
+				csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+			},
+			success: function(data) {
+				$('h3').html("localhost:8000/" + data)
+			}
+		});
+	});
+</script>
+
+{% endblock javascript %}
